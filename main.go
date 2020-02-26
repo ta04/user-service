@@ -20,7 +20,7 @@ const(
 type repository interface{
 	Create(*pb.User) (*pb.User, error)
 	GetALL() ([]*pb.User, error)
-	GetOne(*pb.User) (*pb.User, error)
+	GetOne(*pb.User) ([]*pb.User, error)
 	Update(*pb.User) (*pb.User, error)
 	Delete(*pb.User) (*pb.User, error)
 }
@@ -48,7 +48,7 @@ func (repo *Repository) GetAll() (users []*pb.User, err error){
 	rows, err := repo.db.Query(query)
 
 	for rows.Next(){
-		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month,		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month,		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month, &credit_card_expired_year, &credit_card_ccv, &status)
+		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month, &credit_card_expired_year, &credit_card_cvv, &status)
 		if err != nil{
 			return nil,err
 		}
@@ -73,6 +73,44 @@ func (repo *Repository) GetAll() (users []*pb.User, err error){
 		users = append(users, &user)
 	}
 
+	return users, err
+}
+
+func(repo *Repository) GetOne(idUser *pb.User) (users []*pb.User, err error){
+	var id int32
+	var first_name, last_name, username, password, email_address, phone_number, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year,credit_card_cvv string
+	var status bool
+
+	rows, err := repo.db.Query("SELECT * FROM users WHERE id = ?",idUser)
+	if err != nil{
+		return  nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next(){
+		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month, &credit_card_expired_year, &credit_card_cvv, &status)
+		if err != nil{
+			return nil, err
+		}
+		user := pb.User{
+			Id : id,
+			FirstName:first_name,
+			LastName:last_name,
+			Username:username,
+			Password:password,
+			EmailAddress:email_address,
+			PhoneNumber:phone_number,
+			Address:address,
+			Role:role,
+			CreditCardNumber:credit_card_number,
+			CreditCardType:credit_card_type,
+			CreditCardExpiredMonth:credit_card_expired_month,
+			CreditCardExpiredYear:credit_card_expired_year,
+			CreditCardCvv:credit_card_cvv,
+			Status:status,
+		}
+		users = append(users, &user)
+	}
 	return users, err
 }
 
