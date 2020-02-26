@@ -21,8 +21,8 @@ message User {
     bool status = 16;
 }
 
-//GetAllUsersRequest is a message for requesting ll user
-message GetAllUsersRequest{}
+//IndexUsersRequest is a message for requesting ll user
+message IndexUsersRequest{}
 
 //Response is a message for a response
 message Response{
@@ -39,14 +39,14 @@ message Error{
 
 //UserService service
 service UserService{
-    //Method to create a user
-    rpc CreateUser(User) returns (Response) {}
+    //Method to store a user
+    rpc StoreUser(User) returns (Response) {}
     //Method to get all user
-    rpc GetAllUser(GetAllUsersRequest) returns (Response) {}   
-    //Method to get one user
-    rpc GetOneUser(User) returns (Response) {}
+    rpc IndexUser(IndexUsersRequest) returns (Response) {}
+    //Method to show user
+    rpc ShowUser(User) returns (Response) {}
     //Method to update user
     rpc UpdateUser(User) returns (Response) {}
-    //Method to delete user
-    rpc DeleteUser(User) returns (Response) {}
+    //Method to destroy user
+    rpc DestroyUser(User) returns (Response) {}
 }

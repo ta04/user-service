@@ -18,11 +18,11 @@ const(
 )
 
 type repository interface{
-	Create(*pb.User) (*pb.User, error)
-	GetAll() ([]*pb.User, error)
-	GetOne(*pb.User) (*pb.User, error)
+	Store(*pb.User) (*pb.User, error)
+	Index() ([]*pb.User, error)
+	Show(*pb.User) (*pb.User, error)
 	Update(*pb.User) (*pb.User, error)
-	Delete(*pb.User) (*pb.User, error)
+	Destroy(*pb.User) (*pb.User, error)
 }
 
 type Repository struct {
@@ -30,7 +30,7 @@ type Repository struct {
 	db *sql.DB
 }
 
-func (repo *Repository) Create(user *pb.User) (*pb.User, error){
+func (repo *Repository) Store(user *pb.User) (*pb.User, error){
 	repo.mu.Lock()
 	query := fmt.Sprintf("INSERT INTO users (first_name, last_name, username, password, email_address, phone_number, date_of_birth, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year, credit_card_cvv, status)"+
 		"VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%t')", user.FirstName, user.LastName, user.Username, user.Password, user.EmailAddress, user.PhoneNumber, user.DateOfBirth, user.Address, user.Role, user.CreditCardNumber, user.CreditCardType, user.CreditCardExpiredMonth, user.CreditCardExpiredYear, user.CreditCardCvv, user.Status)
@@ -40,7 +40,7 @@ func (repo *Repository) Create(user *pb.User) (*pb.User, error){
 		return user, err
 }
 
-func (repo *Repository) GetAll() (users []*pb.User, err error){
+func (repo *Repository) Index() (users []*pb.User, err error){
 	var id int32
 	var first_name, last_name, username, password, email_address, phone_number, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year,credit_card_cvv string
 	var status bool
@@ -76,7 +76,7 @@ func (repo *Repository) GetAll() (users []*pb.User, err error){
 	return users, err
 }
 
-func (repo *Repository) GetOne(user *pb.User)(*pb.User, error){
+func (repo *Repository) Show(user *pb.User)(*pb.User, error){
 	var id int32
 	var first_name, last_name, username, password, email_address, phone_number, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year,credit_card_cvv string
 	var status bool
@@ -115,9 +115,9 @@ func (repo *Repository) Update(user *pb.User)(*pb.User, error){
 	return user, err
 }
 
-func (repo *Repository) Delete(user *pb.User) (*pb.User, error){
+func (repo *Repository) Destroy(user *pb.User) (*pb.User, error){
 	repo.mu.Lock()
-	query := fmt.Sprintf("DELETE FROM users WHERE id =#{users.Id}")
+	query := fmt.Sprintf("Destroy FROM users WHERE id =#{users.Id}")
 	_, err:=repo.db.Exec(query)
 	repo.mu.Unlock()
 
@@ -128,8 +128,8 @@ type service struct{
 	repo repository
 }
 
-func(s *service) CreateUser(ctx context.Context, req *pb.User) (*pb.Response, error){
-	user, err := s.repo.Create(req)
+func(s *service) StoreUser(ctx context.Context, req *pb.User) (*pb.Response, error){
+	user, err := s.repo.Store(req)
 	if err != nil{
 		return nil, err
 	}
@@ -140,16 +140,16 @@ func(s *service) CreateUser(ctx context.Context, req *pb.User) (*pb.Response, er
 	},err
 }
 
-func(s *service) GetAllUser(ctx context.Context, req *pb.GetAllUsersRequest) (*pb.Response, error){
-	users, err := s.repo.GetAll()
+func(s *service) IndexUser(ctx context.Context, req *pb.IndexUsersRequest) (*pb.Response, error){
+	users, err := s.repo.Index()
 
 	return &pb.Response{
 		Users: users,
 	}, err
 }
 
-func(s *service) GetOneUser(ctx context.Context, req *pb.User) (*pb.Response, error){
-	user, err := s.repo.GetOne(req)
+func(s *service) ShowUser(ctx context.Context, req *pb.User) (*pb.Response, error){
+	user, err := s.repo.Show(req)
 
 	return &pb.Response{
 		User: user,
@@ -168,8 +168,8 @@ func(s *service) UpdateUser(ctx context.Context, req *pb.User) (*pb.Response, er
 	},err
 }
 
-func(s *service) DeleteUser(ctx context.Context, req *pb.User) (*pb.Response, error){
-	user, err := s.repo.Delete(req)
+func(s *service) DestroyUser(ctx context.Context, req *pb.User) (*pb.Response, error){
+	user, err := s.repo.Destroy(req)
 	if err != nil{
 		return nil, err
 	}
