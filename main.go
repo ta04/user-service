@@ -4,9 +4,10 @@ import(
 	"context"
 	"database/sql"
 	"fmt"
-	pb "github.com/G0tYouuser-service/proto"
+	pb "github.com/G0tYou/user-service/proto"
+	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
-	"google.golang.org.grpc/reflection"
+	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
 	"sync"
@@ -30,11 +31,47 @@ type Repository struct {
 }
 
 func (repo *Repository) Create(user *pb.User) (*pb.User, error){
-	repo.mu.lock()
+	repo.mu.Lock()
 	query := fmt.Sprintf("INSERT INTO users (first_name, last_name, username, password, email_address, phone_number, date_of_birth, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year, credit_card_cvv, status)"+
-		"VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%t')", user.First_name, user.Last_name, user.Username, user.Password, user.Email_address, user.Phone_number, user.Date_of_birth, user.Address, user.Role, user.Credit_card_number, user.Credit_card_type, user.Credit_card_expired_month, user.Credit_card_expired_year, user.Credit_card_cvv, user.Status)
+		"VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%t')", user.FirstName, user.LastName, user.Username, user.Password, user.EmailAddress, user.PhoneNumber, user.DateOfBirth, user.Address, user.Role, user.CreditCardNumber, user.CreditCardType, user.CreditCardExpiredMonth, user.CreditCardExpiredYear, user.CreditCardCvv, user.Status)
 		_, err := repo.db.Exec(query)
 		repo.mu.Unlock()
 
 		return user, err
+}
+
+func (repo *Repository) GetAll() (users []*pb.User, err error){
+	var id int32
+	var first_name, last_name, username, password, email_address, phone_number, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year,credit_card_cvv string
+	var status bool
+	query := "SELECT * FROM users"
+	rows, err := repo.db.Query(query)
+
+	for rows.Next(){
+		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month,		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month,		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month, &credit_card_expired_year, &credit_card_ccv, &status)
+		if err != nil{
+			return nil,err
+		}
+
+		user := pb.User{
+			Id : id,
+			FirstName:first_name,
+			LastName:last_name,
+			Username:username,
+			Password:password,
+			EmailAddress:email_address,
+			PhoneNumber:phone_number,
+			Address:address,
+			Role:role,
+			CreditCardNumber:credit_card_number,
+			CreditCardType:credit_card_type,
+			CreditCardExpiredMonth:credit_card_expired_month,
+			CreditCardExpiredYear:credit_card_expired_year,
+			CreditCardCvv:credit_card_cvv,
+			Status:status,
+		}
+		users = append(users, &user)
+	}
+
+	return users, err
 }
