@@ -19,8 +19,8 @@ const(
 
 type repository interface{
 	Create(*pb.User) (*pb.User, error)
-	GetALL() ([]*pb.User, error)
-	GetOne(*pb.User) ([]*pb.User, error)
+	GetAll() ([]*pb.User, error)
+	GetOne(*pb.User) (*pb.User, error)
 	Update(*pb.User) (*pb.User, error)
 	Delete(*pb.User) (*pb.User, error)
 }
@@ -76,23 +76,17 @@ func (repo *Repository) GetAll() (users []*pb.User, err error){
 	return users, err
 }
 
-func(repo *Repository) GetOne(idUser *pb.User) (users []*pb.User, err error){
+func (repo *Repository) GetOne(user *pb.User)(*pb.User, error){
 	var id int32
 	var first_name, last_name, username, password, email_address, phone_number, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year,credit_card_cvv string
 	var status bool
+	query := fmt.Sprintf("SELECT * FROM users WHERE id = %d",user.Id)
 
-	rows, err := repo.db.Query("SELECT * FROM users WHERE id =#{idUser}")
+	err := repo.db.QueryRow(query).Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month, &credit_card_expired_year, &credit_card_cvv, &status)
 	if err != nil{
 		return  nil, err
 	}
-	defer rows.Close()
-
-	for rows.Next(){
-		err := rows.Scan(&id, &first_name, &last_name, &username, &password, &email_address, &phone_number, &address, &role, &credit_card_number, &credit_card_type, &credit_card_expired_month, &credit_card_expired_year, &credit_card_cvv, &status)
-		if err != nil{
-			return nil, err
-		}
-		user := pb.User{
+	return &pb.User{
 			Id : id,
 			FirstName:first_name,
 			LastName:last_name,
@@ -108,10 +102,7 @@ func(repo *Repository) GetOne(idUser *pb.User) (users []*pb.User, err error){
 			CreditCardExpiredYear:credit_card_expired_year,
 			CreditCardCvv:credit_card_cvv,
 			Status:status,
-		}
-		users = append(users, &user)
-	}
-	return users, err
+		}, err
 }
 
 func (repo *Repository) Update(user *pb.User)(*pb.User, error){
@@ -131,4 +122,92 @@ func (repo *Repository) Delete(user *pb.User) (*pb.User, error){
 	repo.mu.Unlock()
 
 	return user,err
+}
+
+type service struct{
+	repo repository
+}
+
+func(s *service) CreateUser(ctx context.Context, req *pb.User) (*pb.Response, error){
+	user, err := s.repo.Create(req)
+	if err != nil{
+		return nil, err
+	}
+
+	return &pb.Response{
+		User:                 user,
+		Error:                nil,
+	},err
+}
+
+func(s *service) GetAllUser(ctx context.Context, req *pb.GetAllUsersRequest) (*pb.Response, error){
+	users, err := s.repo.GetAll()
+
+	return &pb.Response{
+		Users: users,
+	}, err
+}
+
+func(s *service) GetOneUser(ctx context.Context, req *pb.User) (*pb.Response, error){
+	user, err := s.repo.GetOne(req)
+
+	return &pb.Response{
+		User: user,
+	}, err
+}
+
+func(s *service) UpdateUser(ctx context.Context, req *pb.User) (*pb.Response, error){
+	user, err := s.repo.Update(req)
+	if err != nil{
+		return nil, err
+	}
+
+	return &pb.Response{
+		User:                 user,
+		Error:                nil,
+	},err
+}
+
+func(s *service) DeleteUser(ctx context.Context, req *pb.User) (*pb.Response, error){
+	user, err := s.repo.Delete(req)
+	if err != nil{
+		return nil, err
+	}
+
+	return &pb.Response{
+		User:                 user,
+		Error:                nil,
+	},err
+}
+
+func connectPostgres() (*sql.DB, error) {
+	connStr := "user =silly-wizard dbname=users sslmode=disable password=asyouwish"
+	db, err:= sql.Open("postgres", connStr)
+
+	return db, err
+}
+
+func main() {
+	db, err:= connectPostgres()
+	repo := &Repository{}
+	repo.db = db
+
+	if err != nil{
+		log.Fatalf("failed to connect to postgress: #{err}")
+	}
+
+	listen, err := net.Listen("tcp", port)
+	if err != nil{
+		log.Fatalf("fatiled to listen: #{err}")
+	}
+
+	s := grpc.NewServer()
+
+	pb.RegisterUserServiceServer(s, &service{repo})
+
+	reflection.Register(s)
+	log.Println("Running on port", port)
+	if err != s.Serve(listen) {
+		log.Fatalf("failed to serve: #{err}")
+	}
 }
