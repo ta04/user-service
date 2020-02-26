@@ -81,7 +81,7 @@ func(repo *Repository) GetOne(idUser *pb.User) (users []*pb.User, err error){
 	var first_name, last_name, username, password, email_address, phone_number, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year,credit_card_cvv string
 	var status bool
 
-	rows, err := repo.db.Query("SELECT * FROM users WHERE id = ?",idUser)
+	rows, err := repo.db.Query("SELECT * FROM users WHERE id =#{idUser}")
 	if err != nil{
 		return  nil, err
 	}
@@ -122,4 +122,13 @@ func (repo *Repository) Update(user *pb.User)(*pb.User, error){
 	repo.mu.Unlock()
 
 	return user, err
+}
+
+func (repo *Repository) Delete(user *pb.User) (*pb.User, error){
+	repo.mu.Lock()
+	query := fmt.Sprintf("DELETE FROM users WHERE id =#{users.Id}")
+	_, err:=repo.db.Exec(query)
+	repo.mu.Unlock()
+
+	return user,err
 }
