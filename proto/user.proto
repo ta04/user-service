@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package user;
+
+message User {
+    int32 id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string username = 4;
+    string password = 5;
+    string email_address = 6;
+    string phone_number = 7;
+    string date_of_birth = 8;
+    string address = 9;
+    string role = 10;
+    string credit_card_number = 11;
+    string credit_card_type = 12;
+    string credit_card_expired_month = 13;
+    string credit_card_expired_year = 14;
+    string credit_card_cvv = 15;
+    bool status = 16;
+}
+
+//GetAllUsersRequest is a message for requesting ll user
+message GetAllUsersRequest{}
+
+//Response is a message for a response
+message Response{
+    User user = 1;
+    Error error = 2;
+    repeated User users = 3;
+}
+
+message Error{
+    string code = 1;
+    string message = 2;
+}
+
+
+//UserService service
+service UserService{
+    //Method to create a user
+    rpc CreateUser(User) returns (Response) {}
+    //Method to get all user
+    rpc GetAllUser(GetAllUsersRequest) returns (Response) {}   
+    //Method to get one user
+    rpc GetOneUser(User) returns (Response) {}
+    //Method to update user
+    rpc UpdateUser(User) returns (Response) {}
+    //Method to delete user
+    rpc DeleteUser(User) returns (Response) {}
+}
