@@ -10,8 +10,8 @@ import (
 const (
 	host     = "database"
 	port     = 5432
-	user     = "silly-wizard"
-	password = "asyouwish"
+	user     = "sleepingnext"
+	password = "kevin99123"
 	dbname   = "users"
 )
 

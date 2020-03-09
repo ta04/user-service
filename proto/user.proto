@@ -1,3 +1,5 @@
+// user-service/proto/user.proto
+
 syntax = "proto3";
 
 package com.ta04.srv.user;
@@ -21,36 +23,36 @@ message User {
     bool status = 16;
 }
 
-//IndexUsersRequest is a message for requesting ll user
+// IndexUsersRequest is a message for IndexUsers
 message IndexUsersRequest{}
 
-//Response is a message for a response
+// Response is a response message
 message Response{
     User user = 1;
     Error error = 2;
     repeated User users = 3;
 }
 
+// Error is an error message
 message Error{
     string code = 1;
     string message = 2;
 }
 
-
-//UserService service
+// UserService is a service for user-service
 service UserService{
-    //Method to store a user
-    rpc StoreUser(User) returns (Response) {}
+    // IndexUsers is a method to index all products
+    rpc IndexUsers(IndexUsersRequest) returns (Response) {}
 
-    //Method to get all user
-    rpc IndexUser(IndexUsersRequest) returns (Response) {}
-
-    //Method to show user
+    // ShowUser is a method to show a product
     rpc ShowUser(User) returns (Response) {}
 
-    //Method to update user
+    // StoreUser is a method to store a new product
+    rpc StoreUser(User) returns (Response) {}
+
+    // UpdateUser is a method to update a product
     rpc UpdateUser(User) returns (Response) {}
 
-    //Method to delete user
+    // DestroyUser is a method to delete a product
     rpc DestroyUser(User) returns (Response) {}
 }

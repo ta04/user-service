@@ -1,3 +1,5 @@
+// user-service/main.go
+
 package main
 
 import (
@@ -38,9 +40,9 @@ func main() {
 	})
 
 	// Register handler
-	userPB.RegisterUserServiceServer(s.Server(), h)
+	userPB.RegisterUserServiceHandler(s.Server(), h)
 
-	// Run the server
+	// Run the service
 	err = s.Run()
 	if err != nil {
 		fmt.Println(err)
