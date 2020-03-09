@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/G0tYou/product-service/repository/postgres"
 	"github.com/G0tYou/user-service/database"
 	"github.com/G0tYou/user-service/handler"
 	userPB "github.com/G0tYou/user-service/proto"
+	"github.com/G0tYou/user-service/repository/postgres"
 	_ "github.com/lib/pq"
 	"github.com/micro/go-micro"
 )
