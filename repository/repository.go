@@ -8,6 +8,7 @@ type Repository interface{
 	Store(*userPB.User) (*userPB.User, error)
 	Index() ([]*userPB.User, error)
 	Show(*userPB.User) (*userPB.User, error)
+	ShowByUsername(*userPB.User) (*userPB.User, error)
 	Update(*userPB.User) (*userPB.User, error)
 	Destroy(*userPB.User) (*userPB.User, error)
 }

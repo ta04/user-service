@@ -84,3 +84,34 @@ func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 		Status: status,
 	}, err
 }
+
+func (repo *Repository) ShowByUsername(user *userPB.User) (*userPB.User, error) {
+	var id int32
+	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber, creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv string
+	var status bool
+
+	query := fmt.Sprintf("SELECT * FROM users WHERE username = %s", user.Username)
+	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber, &dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear, &creditCardCvv, &status)
+	if err != nil {
+		return nil, err
+	}
+
+	return &userPB.User{
+		Id: id,
+		FirstName: firstName,
+		LastName: lastName,
+		Username: username,
+		Password: password,
+		EmailAddress: emailAddress,
+		PhoneNumber: phoneNumber,
+		DateOfBirth: dateOfBirth,
+		Address: address,
+		Role: role,
+		CreditCardNumber: creditCardNumber,
+		CreditCardType: creditCardType,
+		CreditCardExpiredMonth: creditCardExpiredMonth,
+		CreditCardExpiredYear: creditCardExpiredYear,
+		CreditCardCvv: creditCardCvv,
+		Status: status,
+	}, err
+}

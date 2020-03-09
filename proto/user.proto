@@ -41,18 +41,21 @@ message Error{
 
 // UserService is a service for user-service
 service UserService{
-    // IndexUsers is a method to index all products
+    // IndexUsers is a method to index all users
     rpc IndexUsers(IndexUsersRequest) returns (Response) {}
 
-    // ShowUser is a method to show a product
+    // ShowUser is a method to show a user
     rpc ShowUser(User) returns (Response) {}
 
-    // StoreUser is a method to store a new product
+    // ShowUser is a method to show a user by their username
+    rpc ShowUserByUsername(User) returns (Response) {}
+
+    // StoreUser is a method to store a new user
     rpc StoreUser(User) returns (Response) {}
 
-    // UpdateUser is a method to update a product
+    // UpdateUser is a method to update a user
     rpc UpdateUser(User) returns (Response) {}
 
-    // DestroyUser is a method to delete a product
+    // DestroyUser is a method to delete a user
     rpc DestroyUser(User) returns (Response) {}
 }

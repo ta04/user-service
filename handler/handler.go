@@ -43,6 +43,18 @@ func (h *handler) ShowUser(ctx context.Context, req *userPB.User, res *userPB.Re
 	return err
 }
 
+func (h *handler) ShowUserByUsername(ctx context.Context, req *userPB.User, res *userPB.Response) error {
+	user, err := h.repository.ShowByUsername(req)
+	if err != nil {
+		return err
+	}
+
+	res.User = user
+	res.Error = nil
+
+	return err
+}
+
 func (h *handler) StoreUser(ctx context.Context, req *userPB.User, res *userPB.Response) error {
 	user, err := h.repository.Store(req)
 	if err != nil {
