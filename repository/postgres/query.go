@@ -6,7 +6,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	userPB "github.com/G0tYou/user-service/proto"
+	userPB "github.com/SleepingNext/user-service/proto"
 )
 
 type Repository struct {
@@ -16,7 +16,7 @@ type Repository struct {
 func (repo *Repository) Index() (users []*userPB.User, err error) {
 	var id int32
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
-	creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
+		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
 	query := "SELCET * FROM users"
 	rows, err := repo.DB.Query(query)
@@ -33,22 +33,22 @@ func (repo *Repository) Index() (users []*userPB.User, err error) {
 		}
 
 		user := &userPB.User{
-			Id: id,
-			FirstName: firstName,
-			LastName: lastName,
-			Username: username,
-			Password: password,
-			EmailAddress: emailAddress,
-			PhoneNumber: phoneNumber,
-			DateOfBirth: dateOfBirth,
-			Address: address,
-			Role: role,
-			CreditCardNumber: creditCardNumber,
-			CreditCardType: creditCardType,
+			Id:                     id,
+			FirstName:              firstName,
+			LastName:               lastName,
+			Username:               username,
+			Password:               password,
+			EmailAddress:           emailAddress,
+			PhoneNumber:            phoneNumber,
+			DateOfBirth:            dateOfBirth,
+			Address:                address,
+			Role:                   role,
+			CreditCardNumber:       creditCardNumber,
+			CreditCardType:         creditCardType,
 			CreditCardExpiredMonth: creditCardExpiredMonth,
-			CreditCardExpiredYear: creditCardExpiredYear,
-			CreditCardCvv: creditCardCvv,
-			Status: status,
+			CreditCardExpiredYear:  creditCardExpiredYear,
+			CreditCardCvv:          creditCardCvv,
+			Status:                 status,
 		}
 		users = append(users, user)
 	}
@@ -59,7 +59,7 @@ func (repo *Repository) Index() (users []*userPB.User, err error) {
 func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 	var id int32
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
-	creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
+		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
 	query := fmt.Sprintf("SELECT * FROM users WHERE id = %d", user.Id)
 	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber,
@@ -70,29 +70,29 @@ func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 	}
 
 	return &userPB.User{
-		Id: id,
-		FirstName: firstName,
-		LastName: lastName,
-		Username: username,
-		Password: password,
-		EmailAddress: emailAddress,
-		PhoneNumber: phoneNumber,
-		DateOfBirth: dateOfBirth,
-		Address: address,
-		Role: role,
-		CreditCardNumber: creditCardNumber,
-		CreditCardType: creditCardType,
+		Id:                     id,
+		FirstName:              firstName,
+		LastName:               lastName,
+		Username:               username,
+		Password:               password,
+		EmailAddress:           emailAddress,
+		PhoneNumber:            phoneNumber,
+		DateOfBirth:            dateOfBirth,
+		Address:                address,
+		Role:                   role,
+		CreditCardNumber:       creditCardNumber,
+		CreditCardType:         creditCardType,
 		CreditCardExpiredMonth: creditCardExpiredMonth,
-		CreditCardExpiredYear: creditCardExpiredYear,
-		CreditCardCvv: creditCardCvv,
-		Status: status,
+		CreditCardExpiredYear:  creditCardExpiredYear,
+		CreditCardCvv:          creditCardCvv,
+		Status:                 status,
 	}, err
 }
 
 func (repo *Repository) ShowByUsername(user *userPB.User) (*userPB.User, error) {
 	var id int32
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
-	creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
+		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
 	query := fmt.Sprintf("SELECT * FROM users WHERE username = %s", user.Username)
 	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber,
@@ -103,21 +103,21 @@ func (repo *Repository) ShowByUsername(user *userPB.User) (*userPB.User, error) 
 	}
 
 	return &userPB.User{
-		Id: id,
-		FirstName: firstName,
-		LastName: lastName,
-		Username: username,
-		Password: password,
-		EmailAddress: emailAddress,
-		PhoneNumber: phoneNumber,
-		DateOfBirth: dateOfBirth,
-		Address: address,
-		Role: role,
-		CreditCardNumber: creditCardNumber,
-		CreditCardType: creditCardType,
+		Id:                     id,
+		FirstName:              firstName,
+		LastName:               lastName,
+		Username:               username,
+		Password:               password,
+		EmailAddress:           emailAddress,
+		PhoneNumber:            phoneNumber,
+		DateOfBirth:            dateOfBirth,
+		Address:                address,
+		Role:                   role,
+		CreditCardNumber:       creditCardNumber,
+		CreditCardType:         creditCardType,
 		CreditCardExpiredMonth: creditCardExpiredMonth,
-		CreditCardExpiredYear: creditCardExpiredYear,
-		CreditCardCvv: creditCardCvv,
-		Status: status,
+		CreditCardExpiredYear:  creditCardExpiredYear,
+		CreditCardCvv:          creditCardCvv,
+		Status:                 status,
 	}, err
 }
