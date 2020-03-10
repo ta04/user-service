@@ -15,8 +15,8 @@ type Repository struct {
 
 func (repo *Repository) Index() (users []*userPB.User, err error) {
 	var id int32
-	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber, creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv string
-	var status bool
+	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
+	creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
 	query := "SELCET * FROM users"
 	rows, err := repo.DB.Query(query)
@@ -25,7 +25,9 @@ func (repo *Repository) Index() (users []*userPB.User, err error) {
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber, &dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear, &creditCardCvv, &status)
+		err := rows.Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber, &dateOfBirth,
+			&address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear,
+			&creditCardCvv, &status)
 		if err != nil {
 			return nil, err
 		}
@@ -56,11 +58,13 @@ func (repo *Repository) Index() (users []*userPB.User, err error) {
 
 func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 	var id int32
-	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber, creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv string
-	var status bool
+	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
+	creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
 	query := fmt.Sprintf("SELECT * FROM users WHERE id = %d", user.Id)
-	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber, &dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear, &creditCardCvv, &status)
+	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber,
+		&dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear,
+		&creditCardCvv, &status)
 	if err != nil {
 		return nil, err
 	}
@@ -87,11 +91,13 @@ func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 
 func (repo *Repository) ShowByUsername(user *userPB.User) (*userPB.User, error) {
 	var id int32
-	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber, creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv string
-	var status bool
+	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
+	creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
 	query := fmt.Sprintf("SELECT * FROM users WHERE username = %s", user.Username)
-	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber, &dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear, &creditCardCvv, &status)
+	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber,
+		&dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear,
+		&creditCardCvv, &status)
 	if err != nil {
 		return nil, err
 	}

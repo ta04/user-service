@@ -3,7 +3,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/G0tYou/user-service/database"
@@ -45,6 +44,6 @@ func main() {
 	// Run the service
 	err = s.Run()
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 }

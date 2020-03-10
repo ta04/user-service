@@ -4,6 +4,7 @@ syntax = "proto3";
 
 package com.ta04.srv.user;
 
+// User is a message for user
 message User {
     int32 id = 1;
     string first_name = 2;
@@ -20,7 +21,7 @@ message User {
     string credit_card_expired_month = 13;
     string credit_card_expired_year = 14;
     string credit_card_cvv = 15;
-    bool status = 16;
+    string status = 16;
 }
 
 // IndexUsersRequest is a message for IndexUsers
@@ -47,7 +48,7 @@ service UserService{
     // ShowUser is a method to show a user
     rpc ShowUser(User) returns (Response) {}
 
-    // ShowUser is a method to show a user by their username
+    // ShowUser is a method to show a user by the user's username
     rpc ShowUserByUsername(User) returns (Response) {}
 
     // StoreUser is a method to store a new user
