@@ -5,7 +5,7 @@ package postgres
 import (
 	"fmt"
 
-	userPB "github.com/SleepingNext/user-service/proto"
+	userPB "github.com/G0tYou/user-service/proto"
 )
 
 func (repo *Repository) Store(user *userPB.User) (*userPB.User, error) {

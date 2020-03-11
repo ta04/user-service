@@ -6,7 +6,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	userPB "github.com/SleepingNext/user-service/proto"
+	userPB "github.com/G0tYou/user-service/proto"
 )
 
 type Repository struct {
