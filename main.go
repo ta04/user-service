@@ -5,10 +5,11 @@ package main
 import (
 	"context"
 	"errors"
+	"log"
+
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/server"
-	"log"
 
 	"github.com/G0tYou/user-service/database"
 	"github.com/G0tYou/user-service/handler"
@@ -19,7 +20,7 @@ import (
 	"github.com/micro/go-micro"
 )
 
-var methodsWithoutAuth = map[string]bool{"User.Show": true, "User.ShowUserByUsername": true, "User.StoreUser": true, }
+var methodsWithoutAuth = map[string]bool{"User.Show": true, "User.ShowUserByUsername": true, "User.StoreUser": true}
 
 func main() {
 	// Setup the micro instance
