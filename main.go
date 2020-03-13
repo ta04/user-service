@@ -20,7 +20,7 @@ import (
 	"github.com/micro/go-micro"
 )
 
-var methodsWithoutAuth = map[string]bool{"User.Show": true, "User.ShowUserByUsername": true, "User.StoreUser": true}
+var methodsWithoutAuth = map[string]bool{"UserService.ShowUser": true, "UserService.ShowUserByUsername": true, "UserService.StoreUser": true}
 
 func main() {
 	// Setup the micro instance
@@ -74,7 +74,7 @@ func AuthWrapper(fn server.HandlerFunc) server.HandlerFunc {
 		log.Println("authenticating with token: ", token)
 
 		// Validate the token
-		authClient := authPB.NewAuthServiceClient("go.micro.srv.auth", client.DefaultClient)
+		authClient := authPB.NewAuthServiceClient("com.ta04.srv.auth", client.DefaultClient)
 		_, err := authClient.ValidateToken(context.Background(), &authPB.Token{
 			Token: token,
 		})

@@ -18,7 +18,7 @@ func (repo *Repository) Index() (users []*userPB.User, err error) {
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
 		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
-	query := "SELCET * FROM users"
+	query := "SELECT * FROM users"
 	rows, err := repo.DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (repo *Repository) ShowByUsername(user *userPB.User) (*userPB.User, error) 
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
 		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
-	query := fmt.Sprintf("SELECT * FROM users WHERE username = %s", user.Username)
+	query := fmt.Sprintf("SELECT * FROM users WHERE username = '%s'", user.Username)
 	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber,
 		&dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear,
 		&creditCardCvv, &status)
