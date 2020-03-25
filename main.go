@@ -28,6 +28,7 @@ func main() {
 		micro.Name("com.ta04.srv.user"),
 		micro.WrapHandler(AuthWrapper),
 	)
+
 	// Initialize the service
 	s.Init()
 
@@ -36,8 +37,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to connect to postgress: #{err}")
 	}
-
 	defer db.Close()
+
 	err = db.Ping()
 	if err != nil {
 		panic(err)
