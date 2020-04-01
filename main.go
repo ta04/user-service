@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"os"
 
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/metadata"
@@ -18,16 +19,27 @@ import (
 	authPB "github.com/SleepingNext/auth-service/proto"
 	_ "github.com/lib/pq"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-plugins/registry/consul"
 )
 
 var methodsWithoutAuth = map[string]bool{"UserService.ShowUser": true, "UserService.ShowUserByUsername": true, "UserService.StoreUser": true}
 
 func main() {
+	// Take or set the port
+	port := ":" + os.Getenv("PORT")
+	if port == ":" {
+		port = ":50054"
+	}
+
+	// Create a new registry
+	registry := consul.NewRegistry()
+
 	// Setup the micro instance
 	s := micro.NewService(
 		micro.Name("com.ta04.srv.user"),
 		micro.WrapHandler(AuthWrapper),
-		micro.Address(":50054"),
+		micro.Address(port),
+		micro.Registry(registry),
 	)
 
 	// Initialize the service
