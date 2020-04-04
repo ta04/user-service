@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
--- Dumped by pg_dump version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
+-- Dumped from database version 11.7 (Ubuntu 11.7-2.pgdg18.04+1)
+-- Dumped by pg_dump version 11.7 (Ubuntu 11.7-2.pgdg18.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,38 +16,14 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: users; Type: DATABASE; Owner: sleepingnext
---
-
-CREATE DATABASE users;
-
-ALTER DATABASE users OWNER TO sleepingnext;
-
-
---
 -- Name: users; Type: TABLE; Schema: public; Owner: sleepingnext
 --
 
-\connect users;
 CREATE TABLE public.users (
     id bigint NOT NULL,
     first_name character varying(255) NOT NULL,
@@ -68,7 +44,7 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO "sleepingnext";
+ALTER TABLE public.users OWNER TO sleepingnext;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: sleepingnext
@@ -82,7 +58,7 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO "sleepingnext";
+ALTER TABLE public.users_id_seq OWNER TO sleepingnext;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sleepingnext
@@ -103,7 +79,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.users (id, first_name, last_name, username, password, email_address, phone_number, date_of_birth, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year, credit_card_cvv, status) FROM stdin;
-1	admin	admin	admin	admin	admin@skit.com	081271762836	2020-03-12	Admin's Home	admin	empty	empty	empty	empty	empty	active
+1	admin	admin	admin	admin	admin@skit.com	081271762836	2020-03-12	Admin's Home	admin	"empty"	"empty"	"empty"	"empty"	"empty"	active
 \.
 
 
@@ -111,7 +87,7 @@ COPY public.users (id, first_name, last_name, username, password, email_address,
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sleepingnext
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, false);
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 
 --
