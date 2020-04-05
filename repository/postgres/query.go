@@ -13,12 +13,13 @@ type Repository struct {
 	DB *sql.DB
 }
 
+// Index will index all active user
 func (repo *Repository) Index() (users []*userPB.User, err error) {
 	var id int32
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
 		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
-	query := "SELECT * FROM users"
+	query := "SELECT * FROM users WHERE status = 'active'"
 	rows, err := repo.DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -56,12 +57,13 @@ func (repo *Repository) Index() (users []*userPB.User, err error) {
 	return users, err
 }
 
+// Show will show an active user by it's id
 func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 	var id int32
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
 		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
-	query := fmt.Sprintf("SELECT * FROM users WHERE id = %d", user.Id)
+	query := fmt.Sprintf("SELECT * FROM users WHERE id = %d AND status = 'active'", user.Id)
 	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber,
 		&dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear,
 		&creditCardCvv, &status)
@@ -89,12 +91,13 @@ func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 	}, err
 }
 
+// ShowByUsername will show an active user by it's username
 func (repo *Repository) ShowByUsername(user *userPB.User) (*userPB.User, error) {
 	var id int32
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
 		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
 
-	query := fmt.Sprintf("SELECT * FROM users WHERE username = '%s'", user.Username)
+	query := fmt.Sprintf("SELECT * FROM users WHERE username = '%s' AND status = 'active'", user.Username)
 	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber,
 		&dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear,
 		&creditCardCvv, &status)
