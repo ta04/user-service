@@ -17,7 +17,7 @@ type Repository struct {
 func (repo *Repository) Index() (users []*userPB.User, err error) {
 	var id int32
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
-		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
+		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status, n, g string
 
 	query := "SELECT * FROM users WHERE status = 'active'"
 	rows, err := repo.DB.Query(query)
@@ -28,7 +28,7 @@ func (repo *Repository) Index() (users []*userPB.User, err error) {
 	for rows.Next() {
 		err := rows.Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber, &dateOfBirth,
 			&address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear,
-			&creditCardCvv, &status)
+			&creditCardCvv, &status, &n, &g)
 		if err != nil {
 			return nil, err
 		}
@@ -50,6 +50,8 @@ func (repo *Repository) Index() (users []*userPB.User, err error) {
 			CreditCardExpiredYear:  creditCardExpiredYear,
 			CreditCardCvv:          creditCardCvv,
 			Status:                 status,
+			N:                      n,
+			G:                      g,
 		}
 		users = append(users, user)
 	}
@@ -61,12 +63,12 @@ func (repo *Repository) Index() (users []*userPB.User, err error) {
 func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 	var id int32
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
-		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
+		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status, n, g string
 
 	query := fmt.Sprintf("SELECT * FROM users WHERE id = %d AND status = 'active'", user.Id)
 	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber,
 		&dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear,
-		&creditCardCvv, &status)
+		&creditCardCvv, &status, &n, &g)
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +90,8 @@ func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 		CreditCardExpiredYear:  creditCardExpiredYear,
 		CreditCardCvv:          creditCardCvv,
 		Status:                 status,
+		N:                      n,
+		G:                      g,
 	}, err
 }
 
@@ -95,12 +99,12 @@ func (repo *Repository) Show(user *userPB.User) (*userPB.User, error) {
 func (repo *Repository) ShowByUsername(user *userPB.User) (*userPB.User, error) {
 	var id int32
 	var firstName, lastName, username, password, emailAddress, phoneNumber, dateOfBirth, address, role, creditCardNumber,
-		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status string
+		creditCardType, creditCardExpiredMonth, creditCardExpiredYear, creditCardCvv, status, n, g string
 
 	query := fmt.Sprintf("SELECT * FROM users WHERE username = '%s' AND status = 'active'", user.Username)
 	err := repo.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &password, &emailAddress, &phoneNumber,
 		&dateOfBirth, &address, &role, &creditCardNumber, &creditCardType, &creditCardExpiredMonth, &creditCardExpiredYear,
-		&creditCardCvv, &status)
+		&creditCardCvv, &status, &n, &g)
 	if err != nil {
 		return nil, err
 	}
@@ -122,5 +126,7 @@ func (repo *Repository) ShowByUsername(user *userPB.User) (*userPB.User, error) 
 		CreditCardExpiredYear:  creditCardExpiredYear,
 		CreditCardCvv:          creditCardCvv,
 		Status:                 status,
+		N:                      n,
+		G:                      g,
 	}, err
 }

@@ -22,6 +22,8 @@ message User {
     string credit_card_expired_year = 14;
     string credit_card_cvv = 15;
     string status = 16;
+    string n=17;
+    string g=18;
 }
 
 // IndexUsersRequest is a message for IndexUsers
