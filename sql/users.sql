@@ -1,3 +1,20 @@
+/*
+Dear Programmers,
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*                                                 *
+*	This file belongs to Kevin Veros Hamonangan   *
+*	and	Fandi Fladimir Dachi and is a part of     *
+*	our	last project as the student of Del        *
+*	Institute of Technology, Sitoluama.           *
+*	Please contact us via Instagram:              *
+*	sleepingnext and fandi_dachi                  *
+*	before copying this file.                     *
+*	Thank you, buddy. 😊                          *
+*                                                 *
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
 --
 -- PostgreSQL database dump
 --
@@ -29,17 +46,14 @@ CREATE TABLE public.users (
     first_name character varying(255) NOT NULL,
     last_name character varying(255) NOT NULL,
     username character varying(255) NOT NULL,
-    password character varying(255) NOT NULL,
+    password bigint NOT NULL,
+    prime_number bigint NOT NULL,
+    generator_value bigint NOT NULL,
     email_address character varying(255) NOT NULL,
     phone_number character varying(255) NOT NULL,
     date_of_birth date NOT NULL,
     address character varying(1000) NOT NULL,
     role character varying(255) NOT NULL,
-    credit_card_number character varying(255) NOT NULL,
-    credit_card_type character varying(255) NOT NULL,
-    credit_card_expired_month character varying(255) NOT NULL,
-    credit_card_expired_year character varying(255) NOT NULL,
-    credit_card_cvv character varying(255) NOT NULL,
     status character varying(255) NOT NULL
 );
 
@@ -78,8 +92,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: sleepingnext
 --
 
-COPY public.users (id, first_name, last_name, username, password, email_address, phone_number, date_of_birth, address, role, credit_card_number, credit_card_type, credit_card_expired_month, credit_card_expired_year, credit_card_cvv, status) FROM stdin;
-1	admin	admin	admin	admin	admin@skit.com	081271762836	2020-03-12	Admin's Home	admin	"empty"	"empty"	"empty"	"empty"	"empty"	active
+COPY public.users (id, first_name, last_name, username, password, prime_number, generator_value, email_address, phone_number, date_of_birth, address, role, status) FROM stdin;
 \.
 
 
@@ -87,7 +100,7 @@ COPY public.users (id, first_name, last_name, username, password, email_address,
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sleepingnext
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
