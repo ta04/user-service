@@ -23,11 +23,12 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-plugins/registry/consul"
-	"github.com/ta04/user-service/config"
-	"github.com/ta04/user-service/database"
-	"github.com/ta04/user-service/handler"
-	userPB "github.com/ta04/user-service/proto"
+	"github.com/ta04/user-service/delivery/rpc/handler"
+	"github.com/ta04/user-service/internal/config"
+	"github.com/ta04/user-service/internal/database"
+	proto "github.com/ta04/user-service/model/proto"
 	"github.com/ta04/user-service/repository/postgres"
+	usecase "github.com/ta04/user-service/usecase/v1"
 )
 
 func main() {
@@ -49,10 +50,12 @@ func main() {
 	}
 	defer db.Close()
 
-	h := handler.NewHandler(&postgres.Postgres{
-		DB: db,
-	})
-	userPB.RegisterUserServiceHandler(s.Server(), h)
+	p := postgres.NewPostgres(db)
+
+	u := usecase.NewUsecase(p)
+
+	h := handler.NewHandler(u)
+	proto.RegisterUserServiceHandler(s.Server(), h)
 
 	err = s.Run()
 	if err != nil {

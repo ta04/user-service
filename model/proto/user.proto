@@ -35,31 +35,39 @@ message User {
     string status = 13;
 }
 
-message IndexUsersRequest{}
+message GetAllUsersRequest {
+    string query = 1;
+    string role = 2;
+    string status = 3;
+}
+
+message GetOneUserRequest {
+    int32 id = 1;
+    string username = 2;
+    bool with_credentials = 3;
+}
 
 message Response {
-    User user = 1;
-    repeated User users = 2;
+    repeated User users = 1;
+    User user = 2;
     Error error = 3;
 }
 
 message Error {
-    string code = 1;
+    int32 code = 1;
     string message = 2;
 }
 
 service UserService {
-    rpc IndexUsers(IndexUsersRequest) returns (Response) {}
+    rpc GetAllUsers (GetAllUsersRequest) returns (Response) {
+    }
 
-    rpc ShowUser(User) returns (Response) {}
+    rpc GetOneUser (GetOneUserRequest) returns (Response) {
+    }
 
-    rpc ShowUserByUsername(User) returns (Response) {}
+    rpc CreateOneUser (User) returns (Response) {
+    }
 
-    rpc ShowUserCredentialsByUsername(User) returns (Response) {}
-
-    rpc StoreUser(User) returns (Response) {}
-
-    rpc UpdateUser(User) returns (Response) {}
-
-    rpc DestroyUser(User) returns (Response) {}
+    rpc UpdateOneUser (User) returns (Response) {
+    }
 }

@@ -17,18 +17,17 @@ Dear Programmers,
 
 package repository
 
-import (
-	userPB "github.com/ta04/user-service/proto"
-)
+import proto "github.com/ta04/user-service/model/proto"
 
 // Repository is the interface of repositories.
 // As there are number of repositories can be used.
 type Repository interface {
-	Index(*userPB.IndexUsersRequest) ([]*userPB.User, error)
-	Show(*userPB.User) (*userPB.User, error)
-	ShowByUsername(*userPB.User) (*userPB.User, error)
-	ShowCredentialsByUsername(*userPB.User) (*userPB.User, error)
-	Store(*userPB.User) (*userPB.User, error)
-	Update(*userPB.User) (*userPB.User, error)
-	Destroy(*userPB.User) (*userPB.User, error)
+	GetAllByQuery(request *proto.GetAllUsersRequest) ([]*proto.User, error)
+	GetAll(request *proto.GetAllUsersRequest) ([]*proto.User, error)
+	GetOneByUsername(request *proto.GetOneUserRequest) (*proto.User, error)
+	GetOneCredentialsByUsername(request *proto.GetOneUserRequest) (*proto.User, error)
+	GetOneCredentials(request *proto.GetOneUserRequest) (*proto.User, error)
+	GetOne(request *proto.GetOneUserRequest) (*proto.User, error)
+	CreateOne(user *proto.User) (*proto.User, error)
+	UpdateOne(user *proto.User) (*proto.User, error)
 }

@@ -15,18 +15,15 @@ Dear Programmers,
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-package database
+package usecase
 
-import (
-	"database/sql"
-	"fmt"
+import proto "github.com/ta04/user-service/model/proto"
 
-	"github.com/ta04/user-service/config"
-)
-
-// OpenPostgresConnection opens a connection to postgres database
-func OpenPostgresConnection() (*sql.DB, error) {
-	return sql.Open("postgres", fmt.Sprintf("host=%s port =%d user=%s password=%s dbname=%s sslmode=disable",
-		config.PostgresHost(), config.PostgresPort(), config.PostgresUser(),
-		config.PostgresPassword(), config.PostgresDBName()))
+// usecase is the interface of usecases.
+// As there are many version of usecases can be made.
+type Usecase interface {
+	GetAll(request *proto.GetAllUsersRequest) ([]*proto.User, *proto.Error)
+	GetOne(request *proto.GetOneUserRequest) (*proto.User, *proto.Error)
+	CreateOne(user *proto.User) (*proto.User, *proto.Error)
+	UpdateOne(user *proto.User) (*proto.User, *proto.Error)
 }
