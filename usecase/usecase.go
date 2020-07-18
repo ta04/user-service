@@ -22,7 +22,7 @@ import proto "github.com/ta04/user-service/model/proto"
 // usecase is the interface of usecases.
 // As there are many version of usecases can be made.
 type Usecase interface {
-	GetAll(request *proto.GetAllUsersRequest) ([]*proto.User, *proto.Error)
+	GetAll(request *proto.GetAllUsersRequest) (*[]*proto.User, *proto.Error)
 	GetOne(request *proto.GetOneUserRequest) (*proto.User, *proto.Error)
 	CreateOne(user *proto.User) (*proto.User, *proto.Error)
 	UpdateOne(user *proto.User) (*proto.User, *proto.Error)

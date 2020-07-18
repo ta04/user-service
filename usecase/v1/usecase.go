@@ -17,7 +17,7 @@ func NewUsecase(repository repository.Repository) *Usecase {
 	}
 }
 
-func (usecase *Usecase) GetAll(request *proto.GetAllUsersRequest) ([]*proto.User, *proto.Error) {
+func (usecase *Usecase) GetAll(request *proto.GetAllUsersRequest) (*[]*proto.User, *proto.Error) {
 	if request == nil {
 		return nil, &proto.Error{
 			Code:    http.StatusBadRequest,
@@ -33,7 +33,7 @@ func (usecase *Usecase) GetAll(request *proto.GetAllUsersRequest) ([]*proto.User
 		request.Role = "customer"
 	}
 
-	var users []*proto.User
+	var users *[]*proto.User
 	var err error
 
 	if request.Query != "" {
@@ -41,7 +41,7 @@ func (usecase *Usecase) GetAll(request *proto.GetAllUsersRequest) ([]*proto.User
 		if err != nil {
 			return nil, &proto.Error{
 				Code:    http.StatusInternalServerError,
-				Message: http.StatusText(http.StatusInternalServerError),
+				Message: err.Error(),
 			}
 		}
 	} else {
@@ -49,7 +49,7 @@ func (usecase *Usecase) GetAll(request *proto.GetAllUsersRequest) ([]*proto.User
 		if err != nil {
 			return nil, &proto.Error{
 				Code:    http.StatusInternalServerError,
-				Message: http.StatusText(http.StatusInternalServerError),
+				Message: err.Error(),
 			}
 		}
 	}
@@ -73,15 +73,15 @@ func (usecase *Usecase) GetOne(request *proto.GetOneUserRequest) (*proto.User, *
 		if err != nil {
 			return nil, &proto.Error{
 				Code:    http.StatusInternalServerError,
-				Message: http.StatusText(http.StatusInternalServerError),
+				Message: err.Error(),
 			}
 		}
-	} else if request.Username != "" && !request.WithCredentials{
+	} else if request.Username != "" && !request.WithCredentials {
 		user, err = usecase.Repository.GetOneByUsername(request)
 		if err != nil {
 			return nil, &proto.Error{
 				Code:    http.StatusInternalServerError,
-				Message: http.StatusText(http.StatusInternalServerError),
+				Message: err.Error(),
 			}
 		}
 	}
@@ -91,7 +91,7 @@ func (usecase *Usecase) GetOne(request *proto.GetOneUserRequest) (*proto.User, *
 		if err != nil {
 			return nil, &proto.Error{
 				Code:    http.StatusInternalServerError,
-				Message: http.StatusText(http.StatusInternalServerError),
+				Message: err.Error(),
 			}
 		}
 	} else if request.Id != 0 && !request.WithCredentials {
@@ -99,21 +99,27 @@ func (usecase *Usecase) GetOne(request *proto.GetOneUserRequest) (*proto.User, *
 		if err != nil {
 			return nil, &proto.Error{
 				Code:    http.StatusInternalServerError,
-				Message: http.StatusText(http.StatusInternalServerError),
+				Message: err.Error(),
 			}
 		}
 	}
-
 
 	return user, nil
 }
 
 func (usecase *Usecase) CreateOne(user *proto.User) (*proto.User, *proto.Error) {
+	if user == nil {
+		return nil, &proto.Error{
+			Code:    http.StatusBadRequest,
+			Message: http.StatusText(http.StatusBadRequest),
+		}
+	}
+
 	user, err := usecase.Repository.CreateOne(user)
 	if err != nil {
 		return nil, &proto.Error{
 			Code:    http.StatusInternalServerError,
-			Message: http.StatusText(http.StatusInternalServerError),
+			Message: err.Error(),
 		}
 	}
 
@@ -121,11 +127,18 @@ func (usecase *Usecase) CreateOne(user *proto.User) (*proto.User, *proto.Error) 
 }
 
 func (usecase *Usecase) UpdateOne(user *proto.User) (*proto.User, *proto.Error) {
+	if user == nil {
+		return nil, &proto.Error{
+			Code:    http.StatusBadRequest,
+			Message: http.StatusText(http.StatusBadRequest),
+		}
+	}
+
 	user, err := usecase.Repository.UpdateOne(user)
 	if err != nil {
 		return nil, &proto.Error{
 			Code:    http.StatusInternalServerError,
-			Message: http.StatusText(http.StatusInternalServerError),
+			Message: err.Error,
 		}
 	}
 

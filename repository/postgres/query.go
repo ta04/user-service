@@ -37,13 +37,13 @@ func NewPostgres(db *sql.DB) *Postgres {
 }
 
 // GetAllByQuery will get all user by query
-func (postgres *Postgres) GetAllByQuery(request *proto.GetAllUsersRequest) ([]*proto.User, error) {
+func (postgres *Postgres) GetAllByQuery(request *proto.GetAllUsersRequest) (*[]*proto.User, error) {
 	var id int32
 	var firstName, lastName, username, emailAddress, phoneNumber, dateOfBirth, address, role, status string
 	var users []*proto.User
 
-	query := fmt.Sprintf("SELECT id, first_name, last_name, username, email_address, phone_number," +
-		" date_of_birth, address, role, status FROM users WHERE (LOWER(first_name) LIKE '%%%s%%' OR LOWER(last_name)" +
+	query := fmt.Sprintf("SELECT id, first_name, last_name, username, email_address, phone_number,"+
+		" date_of_birth, address, role, status FROM users WHERE (LOWER(first_name) LIKE '%%%s%%' OR LOWER(last_name)"+
 		" LIKE '%%%s%%' OR LOWER(email) LIKE '%%%s%%') AND role = '%s' AND status = '%s'", request.Query, request.Query,
 		request.Query, request.Role, request.Status)
 	rows, err := postgres.DB.Query(query)
@@ -73,16 +73,16 @@ func (postgres *Postgres) GetAllByQuery(request *proto.GetAllUsersRequest) ([]*p
 		users = append(users, user)
 	}
 
-	return users, err
+	return &users, err
 }
 
 // GetAll will get all user
-func (postgres *Postgres) GetAll(request *proto.GetAllUsersRequest) ([]*proto.User, error) {
+func (postgres *Postgres) GetAll(request *proto.GetAllUsersRequest) (*[]*proto.User, error) {
 	var id int32
 	var firstName, lastName, username, emailAddress, phoneNumber, dateOfBirth, address, role, status string
 	var users []*proto.User
 
-	query := fmt.Sprintf("SELECT id, first_name, last_name, username, email_address, phone_number, " +
+	query := fmt.Sprintf("SELECT id, first_name, last_name, username, email_address, phone_number, "+
 		"date_of_birth, address, role, status FROM users WHERE role = '%s' AND status = '%s'", request.Role, request.Status)
 	rows, err := postgres.DB.Query(query)
 	if err != nil {
@@ -111,7 +111,7 @@ func (postgres *Postgres) GetAll(request *proto.GetAllUsersRequest) ([]*proto.Us
 		users = append(users, user)
 	}
 
-	return users, err
+	return &users, err
 }
 
 // GetOneByUsername will get a user by username

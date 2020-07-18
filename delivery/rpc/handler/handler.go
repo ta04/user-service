@@ -47,7 +47,7 @@ func (handler *Handler) GetAllUsers(ctx context.Context, req *proto.GetAllUsersR
 		return errors.New(err.Message)
 	}
 
-	res.Users = users
+	res.Users = *users
 	res.Error = nil
 
 	return nil
