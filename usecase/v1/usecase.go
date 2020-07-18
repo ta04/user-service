@@ -38,21 +38,21 @@ func (usecase *Usecase) GetAll(request *proto.GetAllUsersRequest) (*[]*proto.Use
 
 	if request.Query != "" {
 		users, err = usecase.Repository.GetAllByQuery(request)
-		if err != nil {
-			return nil, &proto.Error{
-				Code:    http.StatusInternalServerError,
-				Message: err.Error(),
-			}
-		}
 	} else {
 		users, err = usecase.Repository.GetAll(request)
-		if err != nil {
-			return nil, &proto.Error{
-				Code:    http.StatusInternalServerError,
-				Message: err.Error(),
-			}
+	}
+
+	if users == nil || len(*users) <= 0 {
+		return nil, &proto.Error{
+			Code:    http.StatusInternalServerError,
+			Message: "no users found",
 		}
 	}
+	if err != nil {
+		return nil, &proto.Error{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		}
 
 	return users, nil
 }
