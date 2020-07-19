@@ -18,6 +18,7 @@ Dear Programmers,
 package postgres
 
 import (
+	"errors"
 	"fmt"
 
 	proto "github.com/ta04/user-service/model/proto"
@@ -45,9 +46,18 @@ func (postgres *Postgres) UpdateOne(user *proto.User) (*proto.User, error) {
 		" date_of_birth = '%s', address = '%s', role = '%s', status = '%s' WHERE id = %d",
 		user.FirstName, user.LastName, user.Username, user.Password, user.PrimeNumber, user.GeneratorValue,
 		user.EmailAddress, user.PhoneNumber, user.DateOfBirth, user.Address, user.Role, user.Status, user.Id)
-	_, err := postgres.DB.Exec(query)
+	res, err := postgres.DB.Exec(query)
 	if err != nil {
 		return nil, err
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+
+	if count <= 0 {
+		return nil, errors.New("sql: no rows found")
 	}
 
 	return user, nil
