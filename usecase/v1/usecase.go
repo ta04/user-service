@@ -7,10 +7,12 @@ import (
 	"github.com/ta04/user-service/repository"
 )
 
+// Usecase is the struct of product usecase
 type Usecase struct {
 	Repository repository.Repository
 }
 
+// NewUsecase will create a new product usecase
 func NewUsecase(repository repository.Repository) *Usecase {
 	return &Usecase{
 		Repository: repository,
@@ -35,7 +37,6 @@ func (usecase *Usecase) GetAll(request *proto.GetAllUsersRequest) (*[]*proto.Use
 
 	var users *[]*proto.User
 	var err error
-
 	if request.Query != "" {
 		users, err = usecase.Repository.GetAllByQuery(request)
 	} else {
@@ -53,6 +54,7 @@ func (usecase *Usecase) GetAll(request *proto.GetAllUsersRequest) (*[]*proto.Use
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),
 		}
+	}
 
 	return users, nil
 }
@@ -67,7 +69,6 @@ func (usecase *Usecase) GetOne(request *proto.GetOneUserRequest) (*proto.User, *
 
 	var user *proto.User
 	var err error
-
 	if request.Username != "" && request.WithCredentials {
 		user, err = usecase.Repository.GetOneCredentialsByUsername(request)
 		if err != nil {
@@ -138,7 +139,7 @@ func (usecase *Usecase) UpdateOne(user *proto.User) (*proto.User, *proto.Error) 
 	if err != nil {
 		return nil, &proto.Error{
 			Code:    http.StatusInternalServerError,
-			Message: err.Error,
+			Message: err.Error(),
 		}
 	}
 
