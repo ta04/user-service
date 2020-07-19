@@ -44,8 +44,8 @@ func (postgres *Postgres) GetAllByQuery(request *proto.GetAllUsersRequest) (*[]*
 
 	query := fmt.Sprintf("SELECT id, first_name, last_name, username, email_address, phone_number,"+
 		" date_of_birth, address, role, status FROM users WHERE (LOWER(first_name) LIKE '%%%s%%' OR LOWER(last_name)"+
-		" LIKE '%%%s%%' OR LOWER(email) LIKE '%%%s%%') AND role = '%s' AND status = '%s'", request.Query, request.Query,
-		request.Query, request.Role, request.Status)
+		" LIKE '%%%s%%' OR LOWER(username) LIKE '%%%s%%' OR LOWER(email_address) LIKE '%%%s%%') AND role = '%s' AND status = '%s'",
+		request.Query, request.Query, request.Query, request.Query, request.Role, request.Status)
 	rows, err := postgres.DB.Query(query)
 	if err != nil {
 		return nil, err
