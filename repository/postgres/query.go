@@ -116,90 +116,90 @@ func (postgres *Postgres) GetAll(request *proto.GetAllUsersRequest) (*[]*proto.U
 
 // GetOneByUsername will get a user by username
 func (postgres *Postgres) GetOneByUsername(request *proto.GetOneUserRequest) (*proto.User, error) {
-	var id int32
+	var id, primeNumber, generatorValue int32
 	var firstName, lastName, username, emailAddress, phoneNumber, dateOfBirth, address, role, status string
 
-	query := fmt.Sprintf("SELECT id, first_name, last_name, username, email_address, phone_number, date_of_birth,"+
+	query := fmt.Sprintf("SELECT id, prime_number, generator_value, first_name, last_name, username, email_address, phone_number, date_of_birth,"+
 		" address, role, status FROM users WHERE username = '%s'", request.Username)
 	err := postgres.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &emailAddress, &phoneNumber,
-		&dateOfBirth, &address, &role, &status)
+		&dateOfBirth, &address, &role, &status, &primeNumber, &generatorValue)
 	if err != nil {
 		return nil, err
 	}
 
 	return &proto.User{
-		Id:           id,
-		FirstName:    firstName,
-		LastName:     lastName,
-		Username:     username,
-		EmailAddress: emailAddress,
-		PhoneNumber:  phoneNumber,
-		DateOfBirth:  dateOfBirth,
-		Address:      address,
-		Role:         role,
-		Status:       status,
+		Id:             id,
+		FirstName:      firstName,
+		LastName:       lastName,
+		Username:       username,
+		EmailAddress:   emailAddress,
+		PhoneNumber:    phoneNumber,
+		DateOfBirth:    dateOfBirth,
+		Address:        address,
+		Role:           role,
+		Status:         status,
+		PrimeNumber:    primeNumber,
+		GeneratorValue: generatorValue,
 	}, err
 }
 
 // GetOneCredentialsByUsername will get a user's credentials by username
 func (postgres *Postgres) GetOneCredentialsByUsername(request *proto.GetOneUserRequest) (*proto.User, error) {
-	var password, primeNumber, generatorValue int32
+	var password int32
 
-	query := fmt.Sprintf("SELECT password, prime_number, generator_value FROM users WHERE username = '%s'",
+	query := fmt.Sprintf("SELECT password FROM users WHERE username = '%s'",
 		request.Username)
-	err := postgres.DB.QueryRow(query).Scan(&password, &primeNumber, &generatorValue)
+	err := postgres.DB.QueryRow(query).Scan(&password)
 	if err != nil {
 		return nil, err
 	}
 
 	return &proto.User{
-		Password:       password,
-		PrimeNumber:    primeNumber,
-		GeneratorValue: generatorValue,
+		Password: password,
 	}, err
 }
 
 // GetOneCredentialsByUsername will get a user's credentials by id
 func (postgres *Postgres) GetOneCredentials(request *proto.GetOneUserRequest) (*proto.User, error) {
-	var password, primeNumber, generatorValue int32
+	var password int32
 
-	query := fmt.Sprintf("SELECT password, prime_number, generator_value FROM users WHERE id = %d",
+	query := fmt.Sprintf("SELECT password FROM users WHERE id = %d",
 		request.Id)
-	err := postgres.DB.QueryRow(query).Scan(&password, &primeNumber, &generatorValue)
+	err := postgres.DB.QueryRow(query).Scan(&password)
 	if err != nil {
 		return nil, err
 	}
 
 	return &proto.User{
-		Password:       password,
-		PrimeNumber:    primeNumber,
-		GeneratorValue: generatorValue,
+		Password: password,
 	}, err
 }
 
 // GetOne will get a user by id
 func (postgres *Postgres) GetOne(request *proto.GetOneUserRequest) (*proto.User, error) {
-	var id int32
+	var id, primeNumber, generatorValue int32
 	var firstName, lastName, username, emailAddress, phoneNumber, dateOfBirth, address, role, status string
 
-	query := fmt.Sprintf("SELECT id, first_name, last_name, username, email_address, phone_number, date_of_birth,"+
+	query := fmt.Sprintf("SELECT id, prime_number, generator_value, first_name, last_name, username, email_address, phone_number, date_of_birth,"+
 		" address, role, status FROM users WHERE id = %d", request.Id)
 	err := postgres.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &emailAddress, &phoneNumber,
-		&dateOfBirth, &address, &role, &status)
+		&dateOfBirth, &address, &role, &status, &primeNumber, &generatorValue)
 	if err != nil {
 		return nil, err
 	}
 
 	return &proto.User{
-		Id:           id,
-		FirstName:    firstName,
-		LastName:     lastName,
-		Username:     username,
-		EmailAddress: emailAddress,
-		PhoneNumber:  phoneNumber,
-		DateOfBirth:  dateOfBirth,
-		Address:      address,
-		Role:         role,
-		Status:       status,
+		Id:             id,
+		FirstName:      firstName,
+		LastName:       lastName,
+		Username:       username,
+		EmailAddress:   emailAddress,
+		PhoneNumber:    phoneNumber,
+		DateOfBirth:    dateOfBirth,
+		Address:        address,
+		Role:           role,
+		Status:         status,
+		PrimeNumber:    primeNumber,
+		GeneratorValue: generatorValue,
 	}, err
 }
