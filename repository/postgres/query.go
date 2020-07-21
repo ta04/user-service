@@ -119,10 +119,10 @@ func (postgres *Postgres) GetOneByUsername(request *proto.GetOneUserRequest) (*p
 	var id, primeNumber, generatorValue int32
 	var firstName, lastName, username, emailAddress, phoneNumber, dateOfBirth, address, role, status string
 
-	query := fmt.Sprintf("SELECT id, prime_number, generator_value, first_name, last_name, username, email_address, phone_number, date_of_birth,"+
+	query := fmt.Sprintf("SELECT id, first_name, last_name, username, prime_number, generator_value, email_address, phone_number, date_of_birth,"+
 		" address, role, status FROM users WHERE username = '%s'", request.Username)
-	err := postgres.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &emailAddress, &phoneNumber,
-		&dateOfBirth, &address, &role, &status, &primeNumber, &generatorValue)
+	err := postgres.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &primeNumber, &generatorValue,
+		&emailAddress, &phoneNumber, &dateOfBirth, &address, &role, &status)
 	if err != nil {
 		return nil, err
 	}
@@ -132,14 +132,14 @@ func (postgres *Postgres) GetOneByUsername(request *proto.GetOneUserRequest) (*p
 		FirstName:      firstName,
 		LastName:       lastName,
 		Username:       username,
+		PrimeNumber:    primeNumber,
+		GeneratorValue: generatorValue,
 		EmailAddress:   emailAddress,
 		PhoneNumber:    phoneNumber,
 		DateOfBirth:    dateOfBirth,
 		Address:        address,
 		Role:           role,
 		Status:         status,
-		PrimeNumber:    primeNumber,
-		GeneratorValue: generatorValue,
 	}, err
 }
 
@@ -180,10 +180,10 @@ func (postgres *Postgres) GetOne(request *proto.GetOneUserRequest) (*proto.User,
 	var id, primeNumber, generatorValue int32
 	var firstName, lastName, username, emailAddress, phoneNumber, dateOfBirth, address, role, status string
 
-	query := fmt.Sprintf("SELECT id, prime_number, generator_value, first_name, last_name, username, email_address, phone_number, date_of_birth,"+
+	query := fmt.Sprintf("SELECT id, first_name, last_name, username, prime_number, generator_value, email_address, phone_number, date_of_birth,"+
 		" address, role, status FROM users WHERE id = %d", request.Id)
-	err := postgres.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &emailAddress, &phoneNumber,
-		&dateOfBirth, &address, &role, &status, &primeNumber, &generatorValue)
+	err := postgres.DB.QueryRow(query).Scan(&id, &firstName, &lastName, &username, &primeNumber, &generatorValue,
+		&emailAddress, &phoneNumber, &dateOfBirth, &address, &role, &status)
 	if err != nil {
 		return nil, err
 	}
@@ -193,13 +193,13 @@ func (postgres *Postgres) GetOne(request *proto.GetOneUserRequest) (*proto.User,
 		FirstName:      firstName,
 		LastName:       lastName,
 		Username:       username,
+		PrimeNumber:    primeNumber,
+		GeneratorValue: generatorValue,
 		EmailAddress:   emailAddress,
 		PhoneNumber:    phoneNumber,
 		DateOfBirth:    dateOfBirth,
 		Address:        address,
 		Role:           role,
 		Status:         status,
-		PrimeNumber:    primeNumber,
-		GeneratorValue: generatorValue,
 	}, err
 }
